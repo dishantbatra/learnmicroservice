@@ -19,3 +19,29 @@ services:
     - "DatabaseSettings:CollectionName=Products" 
     depends_on:
     - catalogdb
+  rediscache:
+    container_name: rediscache
+    restart: always
+    #volumes:
+    #- redis_data:/data #We are not going to store  in volume as it is distributed cache
+    ports:
+      - 6379:6379
+  basket.api:
+    container_name: basket.api
+    ports:
+    - 9000:80
+    environment:
+    -  ASPNETCORE_ENVIRONMENT=Development
+    - "CacheSettings:ConnectionString=rediscache:6379" 
+    depends_on:
+    - rediscache
+  portainer:
+     container_name: portainer
+     restart: always
+     ports:
+     - 8888:8000
+     - 9443:9443
+     volumes:
+     - /var/run/docker.sock:/var/run/docker.sock 
+     - portainer_data:/data
+    
