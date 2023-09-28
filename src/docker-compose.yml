@@ -7,10 +7,6 @@ services:
     image: mongo
   rediscache:
     image: redis:alpine
-  portainer:
-    image: portainer/portainer-ce
-  pgadmin:
-    image: dpage/pgadmin4
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
@@ -29,6 +25,4 @@ services:
 volumes:
    mongo_data:
    redis_data:
-   portainer_data: 
    postgres_data: 
-   pgadmin_data: 

@@ -1,18 +1,17 @@
 ﻿using Dapper;
-using Discount.API.Entities;
-using Discount.API.Repositories;
+using Discount.Grpc.Entities;
 using Npgsql;
 
-namespace Discount.API.Repository
+namespace Discount.Grpc.Repositories
 {
-    public class DiscountRepository:IDiscountRepository
+    public class DiscountRepository : IDiscountRepository
     {
         private IConfiguration _configuration;
         private ILogger<DiscountRepository> _logger;
 
-        public DiscountRepository(IConfiguration configuration , ILogger<DiscountRepository> logger)
+        public DiscountRepository(IConfiguration configuration, ILogger<DiscountRepository> logger)
         {
-            this._configuration = configuration?? throw new ArgumentNullException(nameof(configuration));
+            this._configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this._logger = logger;
         }
 
@@ -26,7 +25,7 @@ namespace Discount.API.Repository
                     ("SELECT * FROM Coupon WHERE ProductName = @ProductName", new { ProductName = productName });
                 if (coupon == null)
                 {
-                    return new Coupon(){ProductName = "No Discount", Amount = 0,Description = "No Discount Coupon"};
+                    return new Coupon() { ProductName = "No Discount", Amount = 0, Description = "No Discount Coupon" };
                 }
 
                 return coupon;
@@ -55,10 +54,12 @@ namespace Discount.API.Repository
                     "UPDATE Coupon SET ProductName = @ProductName,Description = @Description,Amount = @Amount Where Id = @Id",
                     new
                     {
-                        ProductName = coupon.ProductName, Description = coupon.Description, Amount = coupon.Amount,
+                        ProductName = coupon.ProductName,
+                        Description = coupon.Description,
+                        Amount = coupon.Amount,
                         Id = coupon.Id
                     });
- 
+
                 if (affected == 0)
                     return false;
                 return true;
