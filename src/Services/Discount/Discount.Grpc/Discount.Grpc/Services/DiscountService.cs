@@ -16,7 +16,7 @@ namespace Discount.Grpc.Services
             _mapper = mapper;
         }
 
-        public async override Task<CouponModel> CreateDiscount(CouponModel request, ServerCallContext context)
+        public async override Task<CouponModel> CreateDiscountRequest(CouponModel request, ServerCallContext context)
         {
             var coupon = _mapper.Map<Coupon>(request);
 
@@ -28,7 +28,7 @@ namespace Discount.Grpc.Services
             return couponModel;
         }
 
-        public async override Task<SuccessResponse> DeleteDiscount(CouponModel request, ServerCallContext context)
+        public async override Task<SuccessResponse> DeleteDiscountRequest(CouponModel request, ServerCallContext context)
         {
             var deleted = await _discountRepository.DeleteDiscount(request.ProductName);
             var response = new SuccessResponse
@@ -39,7 +39,7 @@ namespace Discount.Grpc.Services
             return response;
         }
 
-        public async override Task<CouponModel> GetDiscount(ProductName request, ServerCallContext context)
+        public async override Task<CouponModel> GetDiscountRequest(ProductName request, ServerCallContext context)
         {
             var coupon = await this._discountRepository.GetDiscount(request.Name);
 
@@ -53,7 +53,7 @@ namespace Discount.Grpc.Services
             return couponModel;
         }
 
-        public async override Task<CouponModel> UpdateDiscount(CouponModel request, ServerCallContext context)
+        public async override Task<CouponModel> UpdateDiscountRequest(CouponModel request, ServerCallContext context)
         {
             var coupon = _mapper.Map<Coupon>(request);
 

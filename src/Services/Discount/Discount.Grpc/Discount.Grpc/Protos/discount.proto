@@ -4,10 +4,10 @@ option csharp_namespace = "Discount.Grpc";
 
 // The discount service definition.
 service Discount {
-  rpc GetDiscount (ProductName) returns (CouponModel);
-  rpc CreateDiscount(CouponModel) returns (CouponModel);
-  rpc UpdateDiscount(CouponModel) returns (CouponModel);
-  rpc DeleteDiscount(CouponModel) returns (SuccessResponse);
+  rpc GetDiscountRequest(ProductName) returns (CouponModel);
+  rpc CreateDiscountRequest(CouponModel) returns (CouponModel);
+  rpc UpdateDiscountRequest(CouponModel) returns (CouponModel);
+  rpc DeleteDiscountRequest(CouponModel) returns (SuccessResponse);
 }
 
 message ProductName {
