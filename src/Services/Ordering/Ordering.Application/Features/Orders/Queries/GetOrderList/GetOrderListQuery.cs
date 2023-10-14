@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Ordering.Application.Features.Queries.GetOrderList
+namespace Ordering.Application.Features.Orders.Queries.GetOrderList
 {
     public class GetOrderListQuery : IRequest<List<OrdersVm>>
     {

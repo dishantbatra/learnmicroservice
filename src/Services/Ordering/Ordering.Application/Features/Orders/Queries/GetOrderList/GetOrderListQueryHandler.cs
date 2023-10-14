@@ -2,7 +2,7 @@
 using MediatR;
 using Ordering.Application.Contracts.Persistence;
 
-namespace Ordering.Application.Features.Queries.GetOrderList
+namespace Ordering.Application.Features.Orders.Queries.GetOrderList
 {
     public class GetOrderListQueryHandler : IRequestHandler<GetOrderListQuery, List<OrdersVm>>
     {
@@ -11,7 +11,7 @@ namespace Ordering.Application.Features.Queries.GetOrderList
 
         public GetOrderListQueryHandler(IOrderRepository orderRepository, IMapper mapper)
         {
-            _orderRepository = orderRepository?? throw new ArgumentNullException(nameof(orderRepository));
+            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 

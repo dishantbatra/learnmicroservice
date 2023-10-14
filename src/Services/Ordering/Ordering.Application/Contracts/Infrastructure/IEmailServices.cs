@@ -4,6 +4,6 @@ namespace Ordering.Application.Contracts.Infrastructure
 {
     public interface IEmailServices
     {
-        Task<bool> SendEmailAsync(Email email);
+        Task<bool> SendEmail(Email email);
     }
 }
