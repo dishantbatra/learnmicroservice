@@ -13,10 +13,10 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
 
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private readonly IEmailServices _emailService;
+        private readonly IEmailService _emailService;
         private readonly ILogger<CheckoutCommandHandler> _logger;
 
-        public CheckoutCommandHandler(IOrderRepository orderRepository, IMapper mapper, IEmailServices emailServices, ILogger<CheckoutCommandHandler> logger)
+        public CheckoutCommandHandler(IOrderRepository orderRepository, IMapper mapper, IEmailService emailServices, ILogger<CheckoutCommandHandler> logger)
         {
             _orderRepository = orderRepository?? throw new ArgumentNullException(nameof(orderRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

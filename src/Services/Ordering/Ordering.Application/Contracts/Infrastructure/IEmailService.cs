@@ -2,7 +2,7 @@
 
 namespace Ordering.Application.Contracts.Infrastructure
 {
-    public interface IEmailServices
+    public interface IEmailService
     {
         Task<bool> SendEmail(Email email);
     }

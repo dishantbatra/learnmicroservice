@@ -10,11 +10,11 @@ namespace Ordering.Application
     {
         public static IServiceCollection AddApplicationServices(this  IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(_ => Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(Assembly.GetExecutingAssembly()); //Profile class inhertied
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); // AbstractValidator class inherited
+            services.AddMediatR(_ => Assembly.GetExecutingAssembly()); //IRequestHandler class inherited
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandleExceptionBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandleExceptionBehaviour<,>)); // Pipeline behaviour implemented
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             return services;
         }
