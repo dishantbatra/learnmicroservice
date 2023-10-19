@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Application", "Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.API", "Services\Ordering\Ordering.API\Ordering.API.csproj", "{EE4F61CD-C889-4AE5-BF33-2B7D56156656}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infrastructure", "Services\Ordering\ClassLibrary1\Ordering.Infrastructure.csproj", "{FE9332E6-40AE-470E-805A-7E236370B681}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infrastructure", "Services\Ordering\Ordering.Infrastructure\Ordering.Infrastructure.csproj", "{FE9332E6-40AE-470E-805A-7E236370B681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
