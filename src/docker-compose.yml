@@ -5,6 +5,8 @@ services:
     image: postgres
   catalogdb:
     image: mongo
+  orderdb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
   rediscache:
     image: redis:alpine
   catalog.api:
@@ -23,7 +25,14 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Discount.Grpc/Dockerfile
 
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+
 volumes:
    mongo_data:
    redis_data:
    postgres_data: 
+

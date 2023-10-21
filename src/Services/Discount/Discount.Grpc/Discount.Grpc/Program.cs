@@ -1,3 +1,4 @@
+using Discount.Grpc.Extensions;
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
 
@@ -12,6 +13,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
 var app = builder.Build();
+app.MigrateDatabase<Program>(5);
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();
