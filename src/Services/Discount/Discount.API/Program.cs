@@ -12,7 +12,7 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
 var app = builder.Build();
 app.MigrateDatabase<Program>(5);
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();

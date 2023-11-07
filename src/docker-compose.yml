@@ -33,8 +33,15 @@ services:
   rabbitmq:
     # since we are also using manageement portal,thats why the image name has management also
     image: rabbitmq:3-management-alpine 
+  ocelotapigw:
+    image: ${DOCKER_REGISTRY-}ocelotapigw
+    build:
+      context: .
+      dockerfile: ApiGateways/OcelotApiGw/Dockerfile
+
 volumes:
    mongo_data:
    redis_data:
    postgres_data: 
+
 

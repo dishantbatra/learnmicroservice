@@ -1,3 +1,4 @@
+using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -14,7 +15,17 @@ builder.Host.ConfigureLogging((hostingContext, loggingBuilder) =>
     loggingBuilder.AddDebug();
 });
 
-builder.Services.AddOcelot();
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    //Based on environment file will be picked.
+    // second parameter we use to be true  as it specifies that if the file is not found, the application will continue to run without throwing an error.
+    config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true); 
+});
+
+builder.Services.
+    AddOcelot()
+    .AddCacheManager(x=>x.WithDictionaryHandle());
+
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
