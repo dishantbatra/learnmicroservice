@@ -42,9 +42,11 @@ services:
     container_name: ordering.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=SwN12345678;TrustServerCertificate=true;"  
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=SwN12345678;TrustServerCertificate=true;" 
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672" 
     depends_on:
         - orderdb
+        - rabbitmq
     ports:
         - "8004:80"
   rediscache:
@@ -62,8 +64,10 @@ services:
     -  ASPNETCORE_ENVIRONMENT=Development
     - "CacheSettings:ConnectionString=rediscache:6379" 
     - "GrpcSettings:DiscountUrl=http://discount.grpc" 
+    - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
     - rediscache    
+    - rabbitmq
   discount.grpc:
     container_name: discount.grpc
     environment:
@@ -73,4 +77,10 @@ services:
       - "8003:80"
     depends_on:
       - discountdb
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672" 
+        - "15672:15672" #for portal access
 

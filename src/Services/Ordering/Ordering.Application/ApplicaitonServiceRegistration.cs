@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Application.Behaviours;
-using System.Net.NetworkInformation;
 using System.Reflection;
 
 namespace Ordering.Application
