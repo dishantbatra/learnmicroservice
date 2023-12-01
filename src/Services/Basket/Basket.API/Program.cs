@@ -1,8 +1,9 @@
 using System.Reflection;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories;
+using Common.Logging;
 using MassTransit;
-
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,6 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.AddGrpcClient<Discount.Grpc.Discount.DiscountClient>(o => o.Address = new Uri(builder.Configuration.GetValue<string>("GrpcSettings:DiscountUrl")));
 builder.Services.AddScoped<DiscountGrpcService>();
-
 
 // Redis Configuration
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -39,6 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     options.JsonSerializerOptions.WriteIndented = true;
 });
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 var app = builder.Build();
 
@@ -48,6 +49,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSerilogRequestLogging();
 
 app.MapControllers();
 app.Run();

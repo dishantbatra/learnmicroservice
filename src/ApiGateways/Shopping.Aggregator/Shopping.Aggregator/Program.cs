@@ -1,4 +1,6 @@
+using Common.Logging;
 using Shopping.Aggregator.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +22,9 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c=>c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CatalogUrl"]));
 builder.Services.AddHttpClient<IBasketService, BasketService>(c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BasketUrl"]));
 builder.Services.AddHttpClient<IOrderService, OrderService>(c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:OrderingUrl"]));
-
+builder.Host.UseSerilog(SeriLogger.Configure);
 var app = builder.Build();
-
+app.UseSerilogRequestLogging();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

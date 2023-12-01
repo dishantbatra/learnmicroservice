@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace AspnetRunBasics
 {
@@ -20,6 +22,7 @@ namespace AspnetRunBasics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpLogging(o => { });
             services.AddHttpClient<ICatalogService, CatalogService>(c =>
                 c.BaseAddress = new Uri(Configuration["ApiSettings:GatewayAddress"]));
             services.AddHttpClient<IBasketService, BasketService>(c =>
@@ -47,9 +50,9 @@ namespace AspnetRunBasics
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            //app.UseHttpLogging();
+            app.UseSerilogRequestLogging();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

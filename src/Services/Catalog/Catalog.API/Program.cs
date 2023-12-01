@@ -1,6 +1,8 @@
 using Catalog.API.Data;
 using Catalog.API.Repositories;
+using Common.Logging;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +33,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddScoped<ICatalogContext, CatalogContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
-
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 var app = builder.Build();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
 {

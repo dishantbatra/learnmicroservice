@@ -1,6 +1,8 @@
+using Common.Logging;
 using Discount.API.Extensions;
 using Discount.API.Repositories;
 using Discount.API.Repository;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -10,7 +12,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
+builder.Host.UseSerilog(SeriLogger.Configure);
 var app = builder.Build();
+app.UseSerilogRequestLogging();
 app.MigrateDatabase<Program>(5);
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
 {

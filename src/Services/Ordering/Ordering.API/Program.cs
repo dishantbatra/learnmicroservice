@@ -1,3 +1,4 @@
+using Common.Logging;
 using EventBus.Messages.Common;
 using MassTransit;
 using Ordering.API.EventBusConsumer;
@@ -5,6 +6,7 @@ using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistance;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +36,10 @@ builder.Services.AddMassTransit(config =>
         });
     });
 });
+
+builder.Host.UseSerilog(SeriLogger.Configure);
 var app = builder.Build();
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
