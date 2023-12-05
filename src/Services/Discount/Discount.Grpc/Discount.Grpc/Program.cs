@@ -17,7 +17,7 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Host.UseSerilog(SeriLogger.Configure);
 var app = builder.Build();
 app.UseSerilogRequestLogging();
-app.MigrateDatabase<Program>(5);
+app.MigrateDatabase<Program>();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
+using Polly;
 
 namespace Ordering.API.Extensions
 {
@@ -14,10 +14,20 @@ namespace Ordering.API.Extensions
                 var logger = services.GetRequiredService<ILogger<TContext>>();
                 var context = services.GetService<TContext>();
 
+
+                var retryPolicy = Policy.Handle<SqlException>().
+                     WaitAndRetry(retryCount: 5,
+                     sleepDurationProvider: x => TimeSpan.FromMinutes(Math.Pow(2, 2)),
+                     onRetry: (exception, retryCount, context) =>
+                     {
+                         logger.LogError($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                     });
+
+
                 try
                 {
                     logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
-                    InvokeSeeder(seeder, context, services);
+                    retryPolicy.Execute(() =>InvokeSeeder(seeder, context, services));
                     logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(TContext).Name);
                 }
                 catch (SqlException ex)
@@ -29,12 +39,12 @@ namespace Ordering.API.Extensions
                      * there is no guarantee that our SQL Server database container will be ready when the ordering API microservice start up. 
                      * So for that reason we retry when we can't reach the SQL Server databases. And also in the upcoming sections, 
                      * we create this retry mechanism with using the Poly NuGet package. */
-                    if (retryForAvailability < 50)
-                    {
-                        retryForAvailability++;
-                        System.Threading.Thread.Sleep(2000);
-                        MigrateDatabase<TContext>(webApplication, seeder, retryForAvailability);
-                    }
+                    //if (retryForAvailability < 50)
+                    //{
+                    //    retryForAvailability++;
+                    //    System.Threading.Thread.Sleep(2000);
+                    //    MigrateDatabase<TContext>(webApplication, seeder, retryForAvailability);
+                    //}
                 }
                  return webApplication;
             }
