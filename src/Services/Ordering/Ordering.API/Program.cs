@@ -38,6 +38,7 @@ builder.Services.AddMassTransit(config =>
 });
 
 builder.Host.UseSerilog(SeriLogger.Configure);
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 app.UseSerilogRequestLogging();
 
@@ -60,4 +61,5 @@ app.MigrateDatabase<OrderContext>((context, service) =>
     OrderContextSeed.SeedAsync(context,logger).Wait();
 });
 
+app.MapHealthChecks("/hc");
 app.Run();
