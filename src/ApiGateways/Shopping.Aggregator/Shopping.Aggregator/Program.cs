@@ -3,6 +3,9 @@ using Shopping.Aggregator.Services;
 using Serilog;
 using Polly;
 using Polly.Extensions.Http;
+using HealthChecks.UI.Client;
+using System;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddHealthChecks()
+        .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:CatalogUrl"]}/swagger/index.html"), "Catalog.API", HealthStatus.Degraded)
+        .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:BasketUrl"]}/swagger/index.html"), "Basket.API", HealthStatus.Degraded)
+        .AddUrlGroup(new Uri($"{builder.Configuration["ApiSettings:OrderingUrl"]}/swagger/index.html"), "Ordering.API", HealthStatus.Degraded);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -47,6 +53,13 @@ if (app.Environment.IsDevelopment())
 
 
 app.MapControllers();
+app.MapHealthChecks("/hc",new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+{
+    
+        Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
 app.Run();
 
 static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
