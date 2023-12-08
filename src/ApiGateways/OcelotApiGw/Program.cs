@@ -26,15 +26,24 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 builder.Host.UseSerilog(SeriLogger.Configure);
 
 
+
+
 builder.Services.
     AddOcelot()
     .AddCacheManager(x=>x.WithDictionaryHandle());
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
 
-await app.UseOcelot();
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.Map("/", () =>
+    {
+        return "Hello World!";
+    });
+});
 app.UseSerilogRequestLogging();
-
+await app.UseOcelot();
 app.Run();
